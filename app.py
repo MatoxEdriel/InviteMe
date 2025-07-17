@@ -11,7 +11,7 @@ print("Buscando en:", frames_folder)
 
 frames = [Image.open(os.path.join(frames_folder, f"frame{i}.png")) for i in range(1, 7)]
 
-# Guardar el GIF en /static/videos/
+
 gif_output = os.path.join(os.path.dirname(__file__), "static", "videos", "saludo_animado.gif")
 if not os.path.exists(gif_output):
     frames[0].save(
@@ -31,4 +31,5 @@ def home():
     return render_template("index.html", nombre=nombre)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

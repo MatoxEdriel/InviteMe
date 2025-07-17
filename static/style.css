@@ -1,0 +1,170 @@
+:root {
+    --color-sunflower: #FFC312;
+    --color-honey: #F79F1F;
+    --color-cream: #FFF6A9;
+    --color-brown: #A67C00;
+    --color-gray: #3E3E3E;
+    --color-leaf: #6AB04C;
+}
+
+.btn-sun {
+    background-color: var(--color-sunflower);
+    color: white;
+    border: none;
+}
+
+.btn-sun:hover {
+    background-color: var(--color-honey);
+}
+
+.bg-cream {
+    background-color: var(--color-cream);
+}
+
+
+.bg-honey {
+
+    background-color: var(--color-honey);
+
+
+}
+
+.bg-brown {
+
+    background-color: var(--color-brown);
+
+
+}
+
+.custom-rounded {
+
+
+    border-radius: 2rem;
+
+}
+
+.text-brown {
+    color: var(--color-brown);
+}
+
+.latido {
+    animation: latir 5s infinite ease-in-out;
+    display: inline-block;
+}
+
+@keyframes latir {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.1);
+    }
+
+    50% {
+        transform: scale(0.95);
+    }
+
+    75% {
+        transform: scale(1.05);
+    }
+}
+
+
+
+
+.contenedor-limitado {
+    max-width: 414px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
+
+.shrink-fade {
+    animation: shrinkFadeOut 0.5s forwards;
+}
+
+@keyframes shrinkFadeOut {
+    to {
+        transform: scale(0);
+        opacity: 0;
+    }
+}
+
+
+
+.girasol-emoji {
+    position: fixed;
+    left: 50%;
+    font-size: 3rem;
+    transform: translateX(-50%);
+    opacity: 1;
+    pointer-events: none;
+    animation-fill-mode: forwards;
+}
+
+
+@keyframes saltoCaida {
+    0% {
+        top: 80vh;
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) rotate(0deg);
+    }
+
+    20% {
+        top: 50vh;
+        transform: translateX(-50%) translateY(-300px) rotate(30deg);
+    }
+
+    40% {
+        top: 80vh;
+        transform: translateX(-50%) translateY(0) rotate(-30deg);
+    }
+
+    70% {
+        top: 100vh;
+        opacity: 1;
+        transform: translateX(-50%) translateY(150px) rotate(360deg);
+    }
+
+    100% {
+        top: 120vh;
+        /* Totalmente fuera */
+        opacity: 0;
+        transform: translateX(-50%) translateY(200px) rotate(720deg);
+    }
+}
+
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+
+
+
+
+@keyframes caer {
+    0% {
+        top: 0;
+        opacity: 1;
+        transform: translateX(-50%) rotate(0deg);
+    }
+
+    80% {
+        top: 80vh;
+        opacity: 1;
+        transform: translateX(-50%) rotate(360deg);
+    }
+
+    100% {
+        top: 100vh;
+        opacity: 0;
+        transform: translateX(-50%) rotate(720deg);
+    }
+}

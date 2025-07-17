@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mi App Flask Bootstrap</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <style>
+        #btnNo {
+            transition: all 0.3s ease;
+        }
+
+        .lugar-opcion {
+            transition: transform 0.3s ease;
+            border-radius: 1rem;
+            cursor: pointer;
+        }
+
+        .lugar-opcion:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .dress-code-option {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-radius: 1rem;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .dress-code-option:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .selected-dress {
+            border: 4px solid #d2b48c;
+            box-shadow: 0 0 20px rgba(210, 180, 140, 0.6);
+        }
+    </style>
+</head>
+
+<body class="text-center p-5 bg-cream">
+
+    <h2 class="mb-3 d-flex align-items-center justify-content-center gap-2">
+        <img src="{{ url_for('static', filename='videos/sunflowers.gif') }}" alt="Girasol animado"
+            style="height:80px;" />
+        <span class="latido">¡H🌻la!</span>
+        <img src="{{ url_for('static', filename='videos/sunflowers.gif') }}" alt="Girasol animado"
+            style="height:80px;" />
+    </h2>
+
+    <div id="advertenciaNo" class="mt-4 d-none">
+        <div class="alert alert-warning animate__animated animate__bounceIn"
+            style="font-family: 'Segoe UI'; font-size: 1.1rem;">
+            😅 ¿Estás tratando de presionar "No"? <br>
+            <img src="{{ url_for('static', filename='videos/advertencia1.gif') }}" alt="Saludo animado"
+                style="height: 80px;">
+        </div>
+    </div>
+
+    <div id="advertenciaNo2" class="mt-4 d-none">
+        <div class="alert alert-danger animate__animated animate__heartBeat"
+            style="font-family: 'Segoe UI'; font-size: 1.1rem;">
+            🙃 Por las hueva porque lo programe para que jamas le des click a no JAJAxd<br>
+            <img src="{{ url_for('static', filename='videos/advertencia2.gif') }}" alt="Advertencia fuerte"
+                style="height: 80px; margin-top: 10px;">
+        </div>
+    </div>
+
+    <div class="container-fluid vh-75 bg-honey p-4 custom-rounded contenedor-limitado" style="position: relative;">
+
+        <!-- Pantalla 1 -->
+        <div id="pantalla1">
+            <form>
+                <div class="row align-items-center mb-3">
+                    <div class="col-auto">
+                        <img src="{{ url_for('static', filename='videos/saludo_animado.gif') }}" alt="Saludo animado"
+                            style="height: 120px;">
+                    </div>
+                    <div class="col">
+                        <h2 class="mb-0 fw-bold">Hola Odalis</h2>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-sunflower bg-brown text-white" onclick="mostrarPantalla2()">
+                    Saludar!
+                </button>
+            </form>
+        </div>
+
+        <!-- Pantalla 2 -->
+        <div id="pantalla2" class="d-none">
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="mensaje" class="form-label">16/07/2025 11:39pm</label>
+                    <div class="p-3 rounded-4 mt-2"
+                        style="background-color: #d2b48c; color: white; font-family: 'Segoe UI', sans-serif; box-shadow: 0 0 8px rgba(0,0,0,0.2);">
+                        ☕ Espero que estés bien.
+                        Si lees esto, es porque ya terminé la sorpresa;
+                        la estoy programando hoy, 16 de julio, como un regalo.
+                        El objetivo de este detalle es invitarte a salir y conocernos mejor 💬
+                    </div>
+                </div>
+                <button type="button" id="btnBueno" class="btn bg-brown text-white">Bueno</button>
+            </form>
+        </div>
+
+        <!-- Pantalla 3 -->
+        <div id="pantalla3" class="d-none">
+            <div class="p-3 rounded-4 mt-2"
+                style="background-color: #d2b48c; color: white; font-family: 'Segoe UI', sans-serif; box-shadow: 0 0 8px rgba(0,0,0,0.2);">
+                Te invito a salir. ¿Quieres salir conmigo?
+            </div>
+            <div class="mt-3 d-flex justify-content-center gap-3" id="botonesContainer">
+                <button id="btnSi" class="btn btn-success">Sí</button>
+                <button id="btnNo" class="btn btn-danger">No</button>
+            </div>
+        </div>
+
+        <!-- Pantalla 4 - Selección de lugar -->
+        <div id="pantalla4" class="d-none">
+            <h4 class="mb-4 fw-bold text-center" style="font-family: 'Segoe UI';">Elige un lugar para salir 🧭</h4>
+            <div class="row justify-content-center g-4">
+                <!-- Fila 1 -->
+                <div class="col-12 col-md-6">
+                    <div class="text-center mb-2">
+                        <h5 class="fw-semibold">Entrada de la 8</h5>
+                    </div>
+                    <button class="btn w-100 p-0 border-0 bg-transparent"
+                        onclick="seleccionarLugar('Parque', 'Entrada de la 8')">
+                        <img src="{{ url_for('static', filename='entrada.jpeg') }}" alt="Entrada de la 8"
+                            class="img-fluid rounded shadow-lg lugar-opcion"
+                            style="box-shadow: 0 10px 20px rgba(0,0,0,0.2); height: 250px; width: 100%; object-fit: cover;" />
+                    </button>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="text-center mb-2">
+                        <h5 class="fw-semibold">Ceibos</h5>
+                    </div>
+                    <button class="btn w-100 p-0 border-0 bg-transparent" onclick="seleccionarLugar('Café', 'Ceibos')">
+                        <img src="{{ url_for('static', filename='img/ceibos.jpeg') }}" alt="Ceibos"
+                            class="img-fluid rounded shadow-lg lugar-opcion"
+                            style="box-shadow: 0 10px 20px rgba(0,0,0,0.2); height: 250px; width: 100%; object-fit: cover;" />
+                    </button>
+                </div>
+
+                <!-- Fila 2 -->
+                <div class="col-12 col-md-6">
+                    <div class="text-center mb-2">
+                        <h5 class="fw-semibold">Puerto Santa Ana</h5>
+                    </div>
+                    <button class="btn w-100 p-0 border-0 bg-transparent"
+                        onclick="seleccionarLugar('Cine', 'Puerto Santa Ana')">
+                        <img src="{{ url_for('static', filename='img/puerto.jpg') }}" alt="Puerto Santa Ana"
+                            class="img-fluid rounded shadow-lg lugar-opcion"
+                            style="box-shadow: 0 10px 20px rgba(0,0,0,0.2); height: 250px; width: 100%; object-fit: cover;" />
+                    </button>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="text-center mb-2">
+                        <h5 class="fw-semibold">La Madriguera</h5>
+                    </div>
+                    <button class="btn w-100 p-0 border-0 bg-transparent"
+                        onclick="seleccionarLugar('Restaurante', 'La Madriguera')">
+                        <img src="{{ url_for('static', filename='img/madriguera.jpeg') }}" alt="La Madriguera"
+                            class="img-fluid rounded shadow-lg lugar-opcion"
+                            style="box-shadow: 0 10px 20px rgba(0,0,0,0.2); height: 250px; width: 100%; object-fit: cover;" />
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla 5 - Selección de dress code -->
+        <div id="pantalla5" class="d-none">
+            <h4 class="mb-4 fw-bold text-center" style="font-family: 'Segoe UI';" id="tituloLugar"></h4>
+            <h5 class="mb-4 text-center">Elige tu dress code 👗</h5>
+            <div class="mt-4">
+                <button id="btnConfirmar" class="btn btn-success d-none" onclick="confirmarCita()">Confirmar
+                    cita</button>
+            </div>
+            <div class="row justify-content-center g-4">
+                <div class="col-12 col-md-4">
+                    <div class="text-center mb-2">
+                        <h5 class="fw-semibold">Blanco xd</h5>
+                    </div>
+                    <img src="{{ url_for('static', filename='img/blanco.jpeg') }}" alt="Blanco"
+                        class="img-fluid rounded shadow-lg dress-code-option"
+                        onclick="seleccionarDressCode('blanco')" />
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="text-center mb-2">
+                        <h5 class="fw-semibold">Negro</h5>
+                    </div>
+                    <img src="{{ url_for('static', filename='img/negro.jpeg') }}" alt="Negro"
+                        class="img-fluid rounded shadow-lg dress-code-option" onclick="seleccionarDressCode('negro')" />
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="text-center mb-2">
+                        <h5 class="fw-semibold">Cómodo (a lo bien)</h5>
+                    </div>
+                    <img src="{{ url_for('static', filename='img/comoda.png') }}" alt="Cómodo"
+                        class="img-fluid rounded shadow-lg dress-code-option"
+                        onclick="seleccionarDressCode('comodo')" />
+                </div>
+            </div>
+
+        </div>
+
+        {% if nombre %}
+        <div class="alert alert-success mt-4">
+            Hola, <strong>{{ nombre }}</strong> 👋
+        </div>
+        {% endif %}
+
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Variables para almacenar la selección
+        let lugarSeleccionado = null;
+        let nombreLugarSeleccionado = null;
+        let dressCodeSeleccionado = null;
+
+        function mostrarPantalla2() {
+            const p1 = document.getElementById("pantalla1");
+            const p2 = document.getElementById("pantalla2");
+            const girasol = document.getElementById("girasol");
+
+            p1.classList.add("shrink-fade");
+
+            setTimeout(() => {
+                p1.classList.add("d-none");
+                p1.classList.remove("shrink-fade");
+
+                girasol.classList.remove("d-none");
+                girasol.style.animation = "saltoCaida 5.0s ease forwards";
+
+                setTimeout(() => {
+                    girasol.classList.add("d-none");
+                    girasol.style.animation = "";
+                    p2.classList.remove("d-none");
+                }, 2000);
+            }, 500);
+        }
+
+        document.getElementById("btnBueno").addEventListener("click", () => {
+            document.getElementById("pantalla2").classList.add("d-none");
+            document.getElementById("pantalla3").classList.remove("d-none");
+            activarMovimientoBotonNo();
+        });
+
+        document.getElementById("btnSi").addEventListener("click", () => {
+            document.getElementById("pantalla3").classList.add("d-none");
+            document.getElementById("pantalla4").classList.remove("d-none");
+        });
+
+        document.getElementById("btnNo").addEventListener("click", () => {
+            // No hace nada o puedes agregar algo divertido aquí
+        });
+
+        function activarMovimientoBotonNo() {
+            const btnNo = document.getElementById("btnNo");
+            const contenedor = document.querySelector('.bg-honey');
+            const advertencia1 = document.getElementById("advertenciaNo");
+            const advertencia2 = document.getElementById("advertenciaNo2");
+
+            let intentosNo = 0;
+            let mostroPrimera = false;
+            let mostroSegunda = false;
+
+            // Convertir el botón en posición absoluta
+            const rect = btnNo.getBoundingClientRect();
+            btnNo.style.position = "absolute";
+            btnNo.style.top = `${rect.top}px`;
+            btnNo.style.left = `${rect.left}px`;
+
+            function mover() {
+                const contRect = contenedor.getBoundingClientRect();
+                const btnWidth = btnNo.offsetWidth;
+                const btnHeight = btnNo.offsetHeight;
+
+                const maxX = contRect.width - btnWidth;
+                const maxY = contRect.height - btnHeight;
+
+                const newX = Math.floor(Math.random() * maxX);
+                const newY = Math.floor(Math.random() * maxY);
+
+                btnNo.style.left = `${newX}px`;
+                btnNo.style.top = `${newY}px`;
+
+                intentosNo++;
+
+                // Mostrar primera advertencia
+                if (intentosNo >= 3 && !mostroPrimera) {
+                    advertencia1.classList.remove("d-none");
+                    mostroPrimera = true;
+                    setTimeout(() => {
+                        advertencia1.classList.add("d-none");
+                    }, 4000);
+                }
+
+                // Mostrar segunda advertencia
+                if (intentosNo >= 6 && !mostroSegunda) {
+                    advertencia2.classList.remove("d-none");
+                    mostroSegunda = true;
+                    setTimeout(() => {
+                        advertencia2.classList.add("d-none");
+                    }, 5000);
+                }
+            }
+
+            btnNo.addEventListener("click", mover);
+            btnNo.addEventListener("mouseenter", mover);
+            btnNo.addEventListener("touchstart", mover);
+        }
+
+        function seleccionarLugar(tipoLugar, nombreLugar) {
+            lugarSeleccionado = tipoLugar;
+            nombreLugarSeleccionado = nombreLugar;
+
+            // Actualizar el título en la pantalla 5
+            document.getElementById("tituloLugar").textContent = `Nos vemos en: ${nombreLugar}`;
+
+            // Ocultar pantalla 4 y mostrar pantalla 5
+            document.getElementById("pantalla4").classList.add("d-none");
+            document.getElementById("pantalla5").classList.remove("d-none");
+        }
+
+        function seleccionarDressCode(tipoDress) {
+            dressCodeSeleccionado = tipoDress;
+
+            // Quitar la clase 'selected-dress' de todas las opciones
+            document.querySelectorAll('.dress-code-option').forEach(img => {
+                img.classList.remove('selected-dress');
+            });
+
+
+            event.target.classList.add('selected-dress');
+
+
+            document.getElementById("btnConfirmar").classList.remove("d-none");
+        }
+
+        function confirmarCita() {
+
+            const lugar = nombreLugarSeleccionado || "Lugar no especificado";
+            const dressCode = dressCodeSeleccionado || "Dress code no especificado";
+
+
+            const mensaje = `☀️ ¡Buenos días, guapísima! 😌%0A%0A*Lugar:* ${lugar}%0A*Código de vestimenta:* ${dressCode}%0A%0ASe viene una cita linda, así que... ponte más guapa (aunque no sé cómo se puede más 🤭).%0A%0A¡Nos vemos pronto! 🌟✨`;
+
+
+            const numeroWhatsApp = "593988616634";
+
+
+            window.open(`https://wa.me/${numeroWhatsApp}?text=${mensaje}`, '_blank');
+
+
+            Swal.fire({
+                title: '¡Confirmación exitosa!',
+                html: `Se abrirá WhatsApp para enviar los detalles.<br><br>
+               <small>Si no se abre automáticamente, por favor escribe manualmente a este número:</small>
+               <br><strong>+${numeroWhatsApp}</strong>`,
+                icon: 'success',
+                confirmButtonText: 'Entendido',
+                footer: 'Revisa tu bandeja de spam si no recibes respuesta en 24 horas'
+            });
+        }
+    </script>
+
+</body>
+
+<footer>
+    <div id="girasol" class="girasol-emoji d-none">🌻</div>
+</footer>
+
+</html>
